@@ -20,6 +20,10 @@ type User {
     favorites: [Recipe]
 }
 
+type Token {
+    token: String!
+}
+
 type Query {
     getAllRecipes: [Recipe]
 }
@@ -32,6 +36,8 @@ type Mutation {
     createdDate: String,
     likes: Int,
     username: String): Recipe
+    
+    signupUser(username: String!, email: String!, password: String!): Token
 }
 
 `;
