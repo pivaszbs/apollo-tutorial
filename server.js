@@ -7,6 +7,7 @@ const User = require('./models/User');
 const {typeDefs} = require('./schema');
 const {resolvers} = require('./resolvers');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 
 //Bring in GraphQL-Express middleware
 const {graphiqlExpress, graphqlExpress} = require('apollo-server-express');
@@ -35,6 +36,22 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+//Setup JWT middleware
+
+app.use(async (req, res, next) => {
+    const token = req.headers['authorization'];
+    if (token !== 'null') {
+        try {
+            const currentUser = await jwt.verify(token, process.env.SECRET);
+            console.log(currentUser)
+        } catch (err) {
+            console.error(err);
+        }
+    }
+    console.log(token);
+    next();
+})
+
 app.use('/graphql',
     bodyParser.json(),
     graphqlExpress({
@@ -46,7 +63,6 @@ app.use('/graphql',
     }));
 
 app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
-
 
 
 const PORT = process.env.PORT || 4444;
