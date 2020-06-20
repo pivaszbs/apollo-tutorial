@@ -2,18 +2,34 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt')
 
 const createToken = (user, secret, expiresIn) => {
-    const { username, email } = user
-    return jwt.sign({ username, email}, secret, { expiresIn })
+    const {username, email} = user
+    return jwt.sign({username, email}, secret, {expiresIn})
 }
 
 exports.resolvers = {
     Query: {
-        getAllRecipes: async (root, args, { Recipe }) => {
+        getAllRecipes: async (root, args, {Recipe}) => {
             return await Recipe.find();
+        },
+
+        getCurrentUser: async (root, args, {currentUser, User}) => {
+            console.log(currentUser)
+            if (!currentUser) {
+                return null;
+            }
+
+
+            const user = await User.findOne({username: currentUser.username})
+                .populate({
+                    path: 'favorites',
+                    model: 'Recipe'
+                });
+
+            return user;
         }
     },
     Mutation: {
-        addRecipe: async (root, { name, description, category, instructions, username }, { Recipe }) => {
+        addRecipe: async (root, {name, description, category, instructions, username}, {Recipe}) => {
             return await new Recipe({
                 name,
                 description,
@@ -23,20 +39,20 @@ exports.resolvers = {
             }).save();
         },
 
-        signupUser: async (root, { username, email, password }, { User }) => {
-            const user = await User.findOne({ username });
+        signupUser: async (root, {username, email, password}, {User}) => {
+            const user = await User.findOne({username});
 
             if (user) {
                 throw new Error('User already exists');
             }
 
-            const newUser = await new User({ username, email, password }).save();
+            const newUser = await new User({username, email, password}).save();
 
-            return { token: createToken(newUser, process.env.SECRET, '1hr')};
+            return {token: createToken(newUser, process.env.SECRET, '1hr')};
         },
 
-        signinUser: async (root, { username, password }, { User }) => {
-            const user = await User.findOne({ username });
+        signinUser: async (root, {username, password}, {User}) => {
+            const user = await User.findOne({username});
 
             if (!user) {
                 throw new Error('User not found');
@@ -47,7 +63,7 @@ exports.resolvers = {
                 throw new Error('Invalid password');
             }
 
-            return { token: createToken(user, process.env.SECRET, '1hr')};
+            return {token: createToken(user, process.env.SECRET, '1hr')};
         }
     }
 };

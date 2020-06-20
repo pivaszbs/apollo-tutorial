@@ -10,11 +10,12 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 import App from './components/App/App';
 import Signin from "./components/Auth/Signin";
 import Signup from "./components/Auth/Signup";
+import withSession from "./components/withSession";
 
 const client = new ApolloClient({
     uri: 'http://localhost:4444/graphql',
     fetchOptions: {
-        credentials: 'inclide'
+        credentials: 'include'
     },
     request: operation => {
         const token = localStorage.getItem('token');
@@ -35,7 +36,7 @@ const client = new ApolloClient({
     }
 });
 
-const Root = () => (
+const Root = withSession(() => (
   <Router>
       <Switch>
           <Route path={'/'} component={App} exact />
@@ -44,7 +45,7 @@ const Root = () => (
           <Redirect to={'/'} />
       </Switch>
   </Router>
-);
+));
 
 
 ReactDOM.render(
