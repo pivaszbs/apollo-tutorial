@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-
 import {GET_ALL_RECIPES} from '../../queries';
 import {Query} from 'react-apollo';
 
