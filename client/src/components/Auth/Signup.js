@@ -44,7 +44,6 @@ class Signup extends Component {
                 <h2 className="App">SignUp</h2>
                 <Mutation mutation={SIGNUP_USER} variables={{username, email, password}}>
                     {(signupUser, { data, loading, error }) => {
-                        console.log(loading)
                         return (
                             <form className="form" onSubmit={event => this.handleSubmit(event, signupUser)}>
                                 <input type="text" name="username" value={username} placeholder="Username"
