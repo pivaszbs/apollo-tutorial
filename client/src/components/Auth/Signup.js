@@ -1,35 +1,69 @@
 import React, {Component} from 'react';
+import {Mutation} from 'react-apollo';
+import {SIGNUP_USER} from "../../queries";
+import Error from "../Error";
+
+const initialState = {
+    username: "",
+    email: "",
+    password: "",
+    passwordConfirm: "",
+}
 
 class Signup extends Component {
-    state = {
-        username: "",
-        email: "",
-        password: "",
-        passwordConfirm: "",
-    }
+    state = { ...initialState };
+
+    clearState = () => this.setState({ ...initialState })
 
     handleChange = e => {
-        const { target: { value, name } } = e;
+        const {target: {value, name}} = e;
         this.setState({
             [name]: value
         });
     }
 
+    handleSubmit = (event, signupUser) => {
+        event.preventDefault();
+        signupUser().then(data => {
+            console.log(data);
+            this.clearState();
+        })
+    }
+
+    validateForm = () => {
+        const {email, username, password, passwordConfirm} = this.state;
+
+        return !email || !username || !password || passwordConfirm !== password;
+    }
+
     render() {
-        const { email, username, password, passwordConfirm } = this.state;
+        const {email, username, password, passwordConfirm} = this.state;
 
         return (
             <div className={"App"}>
                 <h2 className="App">SignUp</h2>
-                <form action="" className="form">
-                    <input type="text" name="username" value={email} placeholder="Username" onChange={this.handleChange}/>
-                    <input type="email" name="email" value={username} placeholder="Email Address" onChange={this.handleChange}/>
-                    <input type="password" name="password" value={password} placeholder="Password" onChange={this.handleChange}/>
-                    <input type="password" name="passwordConfirm" value={passwordConfirm} placeholder="Password confirmation" onChange={this.handleChange}/>
-                    <button type="submit" className="button-primary">
-                        Submit
-                    </button>
-                </form>
+                <Mutation mutation={SIGNUP_USER} variables={{username, email, password}}>
+                    {(signupUser, { data, loading, error }) => {
+                        console.log(loading)
+                        return (
+                            <form className="form" onSubmit={event => this.handleSubmit(event, signupUser)}>
+                                <input type="text" name="username" value={username} placeholder="Username"
+                                       onChange={this.handleChange}/>
+                                <input type="email" name="email" value={email} placeholder="Email Address"
+                                       onChange={this.handleChange}/>
+                                <input type="password" name="password" value={password} placeholder="Password"
+                                       onChange={this.handleChange}/>
+                                <input type="password" name="passwordConfirm" value={passwordConfirm}
+                                       placeholder="Password confirmation"
+                                       onChange={this.handleChange}/>
+                                <button disabled={loading || this.validateForm()} type="submit" className="button-primary">
+                                    Submit
+                                </button>
+                                {error && <Error error={error} />}
+                            </form>
+                        );
+                    }}
+                </Mutation>
             </div>
         );
     }
