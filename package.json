@@ -39,6 +39,7 @@
     "@graphql-codegen/typescript-operations": "1.15.4",
     "@graphql-codegen/typescript-react-apollo": "1.15.4",
     "@graphql-codegen/typescript-resolvers": "1.15.4",
+    "@types/react": "^16.9.38",
     "nodemon": "^1.17.5"
   }
 }
