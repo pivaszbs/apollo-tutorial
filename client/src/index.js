@@ -49,11 +49,9 @@ const Root = withSession(() => (
 
 
 ReactDOM.render(
-  <React.StrictMode>
       <ApolloProvider client={client}>
           <Root />
-      </ApolloProvider>
-  </React.StrictMode>,
+      </ApolloProvider>,
   document.getElementById('root')
 );
 

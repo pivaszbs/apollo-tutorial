@@ -2,11 +2,12 @@
   "name": "react-recipes",
   "version": "1.0.0",
   "description": "A starter for React-Apollo-GraphQL projects",
-  "main": "server.js",
+  "main": "server.ts",
   "scripts": {
-    "server": "nodemon server.js",
+    "server": "ts-node server.ts",
     "client": "cd client && npm start",
-    "dev": "concurrently --names \"server,client\" \"npm run server --silent\" \"npm run client --silent\""
+    "dev": "concurrently --names \"server,client\" \"npm run server --silent\" \"npm run client --silent\"",
+    "ci": "graphql-codegen --config codegen.yml"
   },
   "author": "",
   "license": "ISC",
@@ -18,14 +19,26 @@
     "cors": "^2.8.4",
     "create-react-app": "^3.4.1",
     "dotenv": "^5.0.1",
+    "esm": "^3.2.25",
     "express": "^4.16.3",
     "global": "^4.4.0",
-    "graphql": "^0.13.2",
-    "graphql-tools": "^3.0.2",
+    "graphql": "^15.1.0",
+    "graphql-tools": "^6.0.10",
     "jsonwebtoken": "^8.2.1",
-    "mongoose": "^5.1.3"
+    "mongoose": "^5.1.3",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.5"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "1.15.4",
+    "@graphql-codegen/fragment-matcher": "1.15.4",
+    "@graphql-codegen/introspection": "1.15.4",
+    "@graphql-codegen/typescript": "1.15.4",
+    "@graphql-codegen/typescript-graphql-files-modules": "1.15.4",
+    "@graphql-codegen/typescript-mongodb": "1.15.4",
+    "@graphql-codegen/typescript-operations": "1.15.4",
+    "@graphql-codegen/typescript-react-apollo": "1.15.4",
+    "@graphql-codegen/typescript-resolvers": "1.15.4",
     "nodemon": "^1.17.5"
   }
 }

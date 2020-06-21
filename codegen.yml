@@ -1,0 +1,17 @@
+overwrite: true
+schema: "schema.js"
+generates:
+  generated/index.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-resolvers"
+      - "fragment-matcher"
+  client/src/queries/types.tsx:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      withHooks: true
+      withMutationFn: true
