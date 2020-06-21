@@ -36,12 +36,12 @@ const client = new ApolloClient({
     }
 });
 
-const Root = withSession(() => (
+const Root = withSession(({ refetch }) => (
   <Router>
       <Switch>
           <Route path={'/'} component={App} exact />
-          <Route path={'/signin'} component={Signin} exact />
-          <Route path={'/signup'} component={Signup} exact />
+          <Route path={'/signin'} render={() => <Signin refetch={refetch} />} exact />
+          <Route path={'/signup'} render={() => <Signup refetch={refetch} />} exact />
           <Redirect to={'/'} />
       </Switch>
   </Router>

@@ -6,16 +6,17 @@ import {User} from "../queries/types";
 
 interface Query {
     data: User,
-    loading: boolean
+    loading: boolean,
+    refetch: any,
 }
 
 const withSession = Component => props => {
-    const {data, loading}: Query = useQuery(GET_CURRENT_USER);
+    const { data, loading, refetch }: Query = useQuery(GET_CURRENT_USER);
 
     if (loading) return null;
     console.log(data);
 
-    return <Component {...props} />
+    return <Component {...props} refetch={refetch} />
 
 }
 
