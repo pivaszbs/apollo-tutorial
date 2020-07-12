@@ -1,69 +1,82 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt')
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const createToken = (user, secret, expiresIn) => {
-    const {username, email} = user
-    return jwt.sign({username, email}, secret, {expiresIn})
-}
+  const { username, email } = user;
+  return jwt.sign({ username, email }, secret, { expiresIn });
+};
 
 exports.resolvers = {
-    Query: {
-        getAllRecipes: async (root, args, {Recipe}) => {
-            return await Recipe.find();
-        },
-
-        getCurrentUser: async (root, args, {currentUser, User}) => {
-            console.log(currentUser)
-            if (!currentUser) {
-                return null;
-            }
-
-
-            const user = await User.findOne({username: currentUser.username})
-                .populate({
-                    path: 'favorites',
-                    model: 'Recipe'
-                });
-
-            return user;
-        }
+  Query: {
+    getAllRecipes: async (root, args, { Recipe }) => {
+      return await Recipe.find();
     },
-    Mutation: {
-        addRecipe: async (root, {name, description, category, instructions, username}, {Recipe}) => {
-            return await new Recipe({
-                name,
-                description,
-                category,
-                instructions,
-                username
-            }).save();
-        },
 
-        signupUser: async (root, {username, email, password}, {User}) => {
-            const user = await User.findOne({username});
+    getCurrentUser: async (root, args, { currentUser, User }) => {
+      if (!currentUser) {
+        return null;
+      }
 
-            if (user) {
-                throw new Error('User already exists');
-            }
+      const user = await User.findOne({
+        username: currentUser.username,
+      }).populate({
+        path: "favorites",
+        model: "Recipe",
+      });
 
-            const newUser = await new User({username, email, password}).save();
+      return user;
+    },
 
-            return {token: createToken(newUser, process.env.SECRET, '1hr')};
-        },
+    getRecipe: async (root, { _id }, { Recipe }) => {
+      if (!_id) {
+        return null;
+      }
 
-        signinUser: async (root, {username, password}, {User}) => {
-            const user = await User.findOne({username});
+      const recipe = await Recipe.findOne({ _id });
 
-            if (!user) {
-                throw new Error('User not found');
-            }
+      return recipe;
+    },
+  },
+  Mutation: {
+    addRecipe: async (
+      root,
+      { name, description, category, instructions, username },
+      { Recipe }
+    ) => {
+      return await new Recipe({
+        name,
+        description,
+        category,
+        instructions,
+        username,
+      }).save();
+    },
 
-            const isValidPassword = await bcrypt.compare(password, user.password);
-            if (!isValidPassword) {
-                throw new Error('Invalid password');
-            }
+    signupUser: async (root, { username, email, password }, { User }) => {
+      const user = await User.findOne({ username });
 
-            return {token: createToken(user, process.env.SECRET, '1hr')};
-        }
-    }
+      if (user) {
+        throw new Error("User already exists");
+      }
+
+      const newUser = await new User({ username, email, password }).save();
+
+      return { token: createToken(newUser, process.env.SECRET, "1hr") };
+    },
+
+    signinUser: async (root, { username, password }, { User }) => {
+      const user = await User.findOne({ username });
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      const isValidPassword = await bcrypt.compare(password, user.password);
+      if (!isValidPassword) {
+        throw new Error("Invalid password");
+      }
+
+      return { token: createToken(user, process.env.SECRET, "1hr") };
+    },
+  },
 };

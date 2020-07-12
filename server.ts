@@ -20,7 +20,7 @@ const schema = makeExecutableSchema({
 
 //Connect to database
 mongoose
-    .connect(process.env.MONGO_URI)
+    .connect(process.env.MONGO_URI, { useUnifiedTopology: true })
     .then(() => console.log('DB connected'))
     .catch(e => console.error(e));
 
