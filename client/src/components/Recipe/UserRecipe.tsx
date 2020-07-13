@@ -10,7 +10,43 @@ import {
 
 const UserRecipe = ({ username, _id, name, likes }) => {
   const [deleteUserRecipe, attrs] = useMutation<Mutation["deleteUserRecipe"]>(
-    DELETE_USER_RECIPE
+    DELETE_USER_RECIPE,
+    {
+      variables: {
+        _id,
+      },
+      update: (cache, { data: deleteUserRecipe }) => {
+        const { getUserRecipes } = cache.readQuery({
+          query: GET_USER_RECIPES,
+          variables: {
+            username,
+          },
+        });
+
+        cache.writeQuery({
+          query: GET_USER_RECIPES,
+          variables: {
+            username,
+          },
+          data: {
+            getUserRecipes: getUserRecipes.filter(
+              (recipe) => recipe._id !== deleteUserRecipe._id
+            ),
+          },
+        });
+      },
+      refetchQueries: [
+        {
+          query: GET_USER_RECIPES,
+          variables: {
+            username,
+          },
+        },
+        {
+          query: GET_ALL_RECIPES,
+        },
+      ],
+    }
   );
 
   const handleDelete = (_id) => {
@@ -18,42 +54,7 @@ const UserRecipe = ({ username, _id, name, likes }) => {
       "Are you sure want to delete the recipe?"
     );
     if (confirmDelete) {
-      deleteUserRecipe({
-        variables: {
-          _id,
-        },
-        update: (cache, { data: deleteUserRecipe }) => {
-          const { getUserRecipes } = cache.readQuery({
-            query: GET_USER_RECIPES,
-            variables: {
-              username,
-            },
-          });
-
-          cache.writeQuery({
-            query: GET_USER_RECIPES,
-            variables: {
-              username,
-            },
-            data: {
-              getUserRecipes: getUserRecipes.filter(
-                (recipe) => recipe._id !== deleteUserRecipe._id
-              ),
-            },
-          });
-        },
-        refetchQueries: [
-          {
-            query: GET_USER_RECIPES,
-            variables: {
-              username,
-            },
-          },
-          {
-            query: GET_ALL_RECIPES,
-          },
-        ],
-      });
+      deleteUserRecipe();
     }
   };
   return (

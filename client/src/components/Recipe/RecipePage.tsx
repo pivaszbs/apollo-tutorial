@@ -28,7 +28,7 @@ const RecipePage = ({ match }) => {
       <p>createdDate: {getRecipe.createdDate}</p>
       <p>likes: {getRecipe.likes}</p>
       <p>Created by: {getRecipe.username}</p>
-      <LikeRecipe />
+      <LikeRecipe _id={_id} />
     </div>
   );
 };

@@ -67,6 +67,7 @@ export type Mutation = {
   signupUser?: Maybe<Token>;
   signinUser?: Maybe<Token>;
   deleteUserRecipe?: Maybe<Recipe>;
+  likeRecipe?: Maybe<Recipe>;
 };
 
 
@@ -96,6 +97,12 @@ export type MutationSigninUserArgs = {
 
 export type MutationDeleteUserRecipeArgs = {
   _id: Scalars['ID'];
+};
+
+
+export type MutationLikeRecipeArgs = {
+  _id: Scalars['ID'];
+  username: Scalars['String'];
 };
 
 
