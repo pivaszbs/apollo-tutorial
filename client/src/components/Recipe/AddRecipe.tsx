@@ -1,10 +1,9 @@
-import React, { useState, useLayoutEffect, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useMutation } from "react-apollo";
-import { ADD_RECIPE, GET_ALL_RECIPES } from "../../queries";
+import { ADD_RECIPE, GET_ALL_RECIPES, GET_USER_RECIPES } from "../../queries";
 import Error from "../Error";
 import { withRouter } from "react-router-dom";
 import withAuth from "../withAuth";
-import { Recipe } from "../../queries/types";
 
 const initialState = {
   name: "",
@@ -60,6 +59,14 @@ const AddRecipe = ({ session, history }) => {
 
   const [addRecipe, { data, loading, error }] = useMutation(ADD_RECIPE, {
     update: updateCache,
+    refetchQueries: [
+      {
+        query: GET_USER_RECIPES,
+        variables: {
+          username: session.getCurrentUser.username,
+        },
+      },
+    ],
   });
 
   return (
