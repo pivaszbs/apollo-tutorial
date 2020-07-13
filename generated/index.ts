@@ -69,6 +69,7 @@ export type Mutation = {
   signinUser?: Maybe<Token>;
   deleteUserRecipe?: Maybe<Recipe>;
   likeRecipe?: Maybe<Recipe>;
+  unlikeRecipe?: Maybe<Recipe>;
 };
 
 
@@ -102,6 +103,12 @@ export type MutationDeleteUserRecipeArgs = {
 
 
 export type MutationLikeRecipeArgs = {
+  _id: Scalars['ID'];
+  username: Scalars['String'];
+};
+
+
+export type MutationUnlikeRecipeArgs = {
   _id: Scalars['ID'];
   username: Scalars['String'];
 };
@@ -250,6 +257,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   signinUser?: Resolver<Maybe<ResolversTypes['Token']>, ParentType, ContextType, RequireFields<MutationSigninUserArgs, 'username'>>;
   deleteUserRecipe?: Resolver<Maybe<ResolversTypes['Recipe']>, ParentType, ContextType, RequireFields<MutationDeleteUserRecipeArgs, '_id'>>;
   likeRecipe?: Resolver<Maybe<ResolversTypes['Recipe']>, ParentType, ContextType, RequireFields<MutationLikeRecipeArgs, '_id' | 'username'>>;
+  unlikeRecipe?: Resolver<Maybe<ResolversTypes['Recipe']>, ParentType, ContextType, RequireFields<MutationUnlikeRecipeArgs, '_id' | 'username'>>;
 };
 
 export type Resolvers<ContextType = any> = {

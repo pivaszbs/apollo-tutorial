@@ -24,7 +24,7 @@ const UserInfo = ({ session }) => {
       <ul>
         {favorites.map((favorite) => (
           <li key={favorite._id}>
-            <Link>
+            <Link to={`/recipes/${favorite._id}`}>
               <p>{favorite.name}</p>
             </Link>
           </li>

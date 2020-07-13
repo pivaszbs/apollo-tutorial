@@ -12,7 +12,7 @@ interface Query {
 
 const withSession = (Component) => (props) => {
   const { data, loading, refetch }: Query = useQuery(GET_CURRENT_USER);
-
+  console.log(data);
   if (loading) return null;
 
   return <Component {...props} refetch={refetch} session={data} />;
