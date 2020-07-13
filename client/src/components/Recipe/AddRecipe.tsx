@@ -1,7 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
+import { useMutation } from "react-apollo";
+import { ADD_RECIPE, GET_ALL_RECIPES } from "../../queries";
+import Error from "../Error";
+import { withRouter } from "react-router-dom";
 
-const AddRecipe = () => {
-  const [recipe, setRecipe] = useState({});
+const initialState = {
+  name: "",
+  instructions: "",
+  description: "",
+  category: "Breakfast",
+  username: "",
+};
+
+const AddRecipe = ({ session, history }) => {
+  const [recipe, setRecipe] = useState({ ...initialState });
+
+  const { name, instructions, description, category } = recipe;
+
+  useEffect(() => {
+    setRecipe({
+      ...recipe,
+      username: session.getCurrentUser.username,
+    });
+  }, [session]);
 
   const handleChange = (e) => {
     const {
@@ -13,17 +34,44 @@ const AddRecipe = () => {
     });
   };
 
+  const updateCache = (cache, { data }) => {
+    const { addRecipe } = data;
+    const { getAllRecipes } = cache.readQuery({ query: GET_ALL_RECIPES });
+    cache.writeQuery({
+      query: GET_ALL_RECIPES,
+      data: {
+        getAllRecipes: [addRecipe, ...getAllRecipes],
+      },
+    });
+  };
+
+  const handlerSubmit = (e, addRecipe) => {
+    e.preventDefault();
+    addRecipe({ variables: { ...recipe } }).then(({ data }) => {
+      setRecipe({ ...initialState });
+      history.push("/");
+    });
+  };
+
+  const validateRecipe = ({ name, instructions, description, category }) =>
+    !name || !instructions || !description || !category;
+
+  const [addRecipe, { data, loading, error }] = useMutation(ADD_RECIPE, {
+    update: updateCache,
+  });
+
   return (
     <div className="App">
       <h2>Add AddRecipe</h2>
-      <form className="form">
+      <form onSubmit={(e) => handlerSubmit(e, addRecipe)} className="form">
         <input
           type="text"
           name="name"
           placeholder="Recipe name"
           onChange={handleChange}
+          value={name}
         />
-        <select name="category" onChange={handleChange}>
+        <select value={category} name="category" onChange={handleChange}>
           <option value="Breakfast">Breakfast</option>
           <option value="Dinner">Dinner</option>
           <option value="Lunch">Lunch</option>
@@ -31,21 +79,28 @@ const AddRecipe = () => {
         </select>
         <input
           type="text"
-          name="category"
-          placeholder="Category"
+          name="description"
+          placeholder="Description"
+          value={description}
           onChange={handleChange}
         />
         <textarea
           name="instructions"
           placeholder="Add instructions"
+          value={instructions}
           onChange={handleChange}
         />
-        <button type="submit" className="button-primary">
+        <button
+          disabled={loading || validateRecipe(recipe)}
+          type="submit"
+          className="button-primary"
+        >
           Submit
         </button>
+        {error && <Error error={error} />}
       </form>
     </div>
   );
 };
 
-export default AddRecipe;
+export default withRouter(AddRecipe);

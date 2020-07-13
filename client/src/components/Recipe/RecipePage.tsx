@@ -26,7 +26,7 @@ const RecipePage = ({ match }) => {
       <p>Instructions: {getRecipe.instructions}</p>
       <p>createdDate: {getRecipe.createdDate}</p>
       <p>likes: {getRecipe.likes}</p>
-      <p>username: {getRecipe.username}</p>
+      <p>Created by: {getRecipe.username}</p>
       <button>Like</button>
     </div>
   );
