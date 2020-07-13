@@ -32,6 +32,10 @@ export const GET_CURRENT_USER = gql`
       username
       joinDate
       email
+      favorites {
+        _id
+        name
+      }
     }
   }
 `;
@@ -74,6 +78,16 @@ export const ADD_RECIPE = gql`
       createdDate
       likes
       username
+    }
+  }
+`;
+
+export const SEARCH_RECIPES = gql`
+  query($searchTerm: String!) {
+    searchRecipes(searchTerm: $searchTerm) {
+      _id
+      name
+      likes
     }
   }
 `;
