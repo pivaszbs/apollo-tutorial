@@ -41,6 +41,24 @@ export type Query = {
   __typename?: 'Query';
   getAllRecipes?: Maybe<Array<Maybe<Recipe>>>;
   getCurrentUser?: Maybe<User>;
+  getRecipe?: Maybe<Recipe>;
+  searchRecipes?: Maybe<Array<Maybe<Recipe>>>;
+  getUserRecipes?: Maybe<Array<Maybe<Recipe>>>;
+};
+
+
+export type QueryGetRecipeArgs = {
+  _id: Scalars['ID'];
+};
+
+
+export type QuerySearchRecipesArgs = {
+  searchTerm: Scalars['String'];
+};
+
+
+export type QueryGetUserRecipesArgs = {
+  username: Scalars['String'];
 };
 
 export type Mutation = {

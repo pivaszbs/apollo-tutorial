@@ -42,6 +42,24 @@ export type Query = {
   __typename?: 'Query';
   getAllRecipes?: Maybe<Array<Maybe<Recipe>>>;
   getCurrentUser?: Maybe<User>;
+  getRecipe?: Maybe<Recipe>;
+  searchRecipes?: Maybe<Array<Maybe<Recipe>>>;
+  getUserRecipes?: Maybe<Array<Maybe<Recipe>>>;
+};
+
+
+export type QueryGetRecipeArgs = {
+  _id: Scalars['ID'];
+};
+
+
+export type QuerySearchRecipesArgs = {
+  searchTerm: Scalars['String'];
+};
+
+
+export type QueryGetUserRecipesArgs = {
+  username: Scalars['String'];
 };
 
 export type Mutation = {
@@ -208,6 +226,9 @@ export type TokenResolvers<ContextType = any, ParentType extends ResolversParent
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   getAllRecipes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Recipe']>>>, ParentType, ContextType>;
   getCurrentUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  getRecipe?: Resolver<Maybe<ResolversTypes['Recipe']>, ParentType, ContextType, RequireFields<QueryGetRecipeArgs, '_id'>>;
+  searchRecipes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Recipe']>>>, ParentType, ContextType, RequireFields<QuerySearchRecipesArgs, 'searchTerm'>>;
+  getUserRecipes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Recipe']>>>, ParentType, ContextType, RequireFields<QueryGetUserRecipesArgs, 'username'>>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {

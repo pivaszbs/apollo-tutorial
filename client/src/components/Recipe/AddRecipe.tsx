@@ -4,6 +4,7 @@ import { ADD_RECIPE, GET_ALL_RECIPES } from "../../queries";
 import Error from "../Error";
 import { withRouter } from "react-router-dom";
 import withAuth from "../withAuth";
+import { Recipe } from "../../queries/types";
 
 const initialState = {
   name: "",

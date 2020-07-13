@@ -2,11 +2,15 @@ import React from "react";
 import { useQuery } from "react-apollo";
 import { GET_USER_RECIPES } from "../../queries";
 import { Link } from "react-router-dom";
+import { Query, QueryGetUserRecipesArgs } from "../../queries/types";
 
 const UserRecipes = ({ username }) => {
-  const { data, loading, error } = useQuery(GET_USER_RECIPES, {
-    variables: { username },
-  });
+  const { data, loading, error } = useQuery<Query, QueryGetUserRecipesArgs>(
+    GET_USER_RECIPES,
+    {
+      variables: { username },
+    }
+  );
 
   if (loading) return <div>Loading</div>;
 
