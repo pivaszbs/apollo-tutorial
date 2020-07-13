@@ -67,6 +67,7 @@ export type Mutation = {
   addRecipe?: Maybe<Recipe>;
   signupUser?: Maybe<Token>;
   signinUser?: Maybe<Token>;
+  deleteUserRecipe?: Maybe<Recipe>;
 };
 
 
@@ -91,6 +92,11 @@ export type MutationSignupUserArgs = {
 export type MutationSigninUserArgs = {
   username: Scalars['String'];
   password?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationDeleteUserRecipeArgs = {
+  _id: Scalars['ID'];
 };
 
 
@@ -235,6 +241,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   addRecipe?: Resolver<Maybe<ResolversTypes['Recipe']>, ParentType, ContextType, RequireFields<MutationAddRecipeArgs, 'name' | 'category' | 'description' | 'instructions'>>;
   signupUser?: Resolver<Maybe<ResolversTypes['Token']>, ParentType, ContextType, RequireFields<MutationSignupUserArgs, 'username' | 'email' | 'password'>>;
   signinUser?: Resolver<Maybe<ResolversTypes['Token']>, ParentType, ContextType, RequireFields<MutationSigninUserArgs, 'username'>>;
+  deleteUserRecipe?: Resolver<Maybe<ResolversTypes['Recipe']>, ParentType, ContextType, RequireFields<MutationDeleteUserRecipeArgs, '_id'>>;
 };
 
 export type Resolvers<ContextType = any> = {
