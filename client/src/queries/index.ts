@@ -91,3 +91,13 @@ export const SEARCH_RECIPES = gql`
     }
   }
 `;
+
+export const GET_USER_RECIPES = gql`
+  query($username: String!) {
+    getUserRecipes(username: $username) {
+      _id
+      name
+      likes
+    }
+  }
+`;
