@@ -19,6 +19,11 @@ const UserRecipes = ({ username }) => {
   return (
     <>
       <h3>Your recipes</h3>
+      {data.getUserRecipes.length === 0 && (
+        <p>
+          <strong>You have not added any recipes yet</strong>
+        </p>
+      )}
       <ul>
         {data.getUserRecipes.map(({ _id, likes, name }) => (
           <UserRecipe
